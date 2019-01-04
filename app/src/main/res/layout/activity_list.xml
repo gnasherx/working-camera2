@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ListActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -15,7 +15,7 @@
         android:theme="@style/MyDarkToolbarStyle"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,9 +25,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
-    <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cameraFab"
         style="@style/FAB"
         android:layout_width="wrap_content"

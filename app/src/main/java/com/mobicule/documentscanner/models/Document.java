@@ -1,4 +1,4 @@
-package com.mobicule.documentscanner;
+package com.mobicule.documentscanner.models;
 
 public class Document {
     private  String name;
