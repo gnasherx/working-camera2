@@ -79,11 +79,6 @@ public class ListActivity extends AppCompatActivity {
             }
         }
 
-        list.add(new SingleDocument("Pan card 1"));
-        list.add(new SingleDocument("Pan card 2"));
-        list.add(new SingleDocument("Pan card 3"));
-        list.add(new SingleDocument("Pan card 4"));
-
         adapter.notifyDataSetChanged();
     }
 
