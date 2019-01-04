@@ -35,11 +35,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.util.Range;
 import android.util.Size;
@@ -51,6 +53,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -73,7 +78,7 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class CameraFragment extends Fragment
-        implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     /**
@@ -91,6 +96,14 @@ public class CameraFragment extends Fragment
     }
 
     CameraManager manager;
+    /**
+     * Guidline margins
+     */
+    private int LEFT;
+    private int TOP;
+    private int RIGHT;
+    private int BOTTOM;
+
 
     /**
      * Tag for the {@link Log}.
@@ -451,8 +464,42 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+//        view.findViewById(R.id.picture).setOnClickListener(this);
+        ImageView mGuidlineImageview = view.findViewById(R.id.guidline);
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        /**
+         * Check Aadhar guid line size or Bank cheque guid line size
+         */
+        try {
+            if (getArguments().getString("type") != null) {
+                if (getArguments().getString("type").equals("Bank Cheque")) {
+                    Log.d(TAG, "onViewCreated: Bank Cheque");
+                    LEFT = 80;
+                    TOP = 50;
+                    RIGHT = 80;
+                    BOTTOM = 50;
+                } else {
+                    LEFT = 100;
+                    TOP = 200;
+                    RIGHT = 100;
+                    BOTTOM = 200;
+                }
+            }
+
+            buttonLayoutParams.setMargins(LEFT, TOP, RIGHT, BOTTOM);
+            mGuidlineImageview.setLayoutParams(buttonLayoutParams);
+        } catch (Exception e) {
+            Log.d(TAG, "onViewCreated: Error in guidline");
+            e.printStackTrace();
+        }
+        mTextureView = view.findViewById(R.id.texture);
+        mTextureView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePicture();
+            }
+        });
     }
 
     @Override
@@ -820,6 +867,8 @@ public class CameraFragment extends Fragment
      * Initiate a still image capture.
      */
     private void takePicture() {
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
         lockFocus();
     }
 
@@ -938,30 +987,29 @@ public class CameraFragment extends Fragment
 //            e.printStackTrace();
 //        }
 //    }
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.camera_anim);
-                view.findViewById(R.id.picture).startAnimation(animation);
-                MediaActionSound sound = new MediaActionSound();
-                sound.play(MediaActionSound.SHUTTER_CLICK);
-                takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
-        }
-    }
-
+//    @Override
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.picture: {
+//                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.camera_anim);
+//                view.findViewById(R.id.picture).startAnimation(animation);
+//                MediaActionSound sound = new MediaActionSound();
+//                sound.play(MediaActionSound.SHUTTER_CLICK);
+//                takePicture();
+//                break;
+//            }
+//            case R.id.info: {
+//                Activity activity = getActivity();
+//                if (null != activity) {
+//                    new AlertDialog.Builder(activity)
+//                            .setMessage(R.string.intro_message)
+//                            .setPositiveButton(android.R.string.ok, null)
+//                            .show();
+//                }
+//                break;
+//            }
+//        }
+//    }
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
@@ -1006,7 +1054,7 @@ public class CameraFragment extends Fragment
             } finally {
                 Log.d(TAG, "run: finally");
                 Intent intent = new Intent(getActivity().getBaseContext(), PreviewActivity.class);
-                intent.putExtra("type",getArguments().getString("type"));
+                intent.putExtra("type", getArguments().getString("type"));
                 intent.putExtra("filePath", mFile.getAbsolutePath());
                 startActivity(intent);
                 mImage.close();

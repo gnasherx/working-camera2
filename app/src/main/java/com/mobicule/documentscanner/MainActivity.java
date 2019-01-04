@@ -1,9 +1,13 @@
 package com.mobicule.documentscanner;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,6 +16,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobicule.documentscanner.models.Document;
 
@@ -50,16 +55,22 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.CustomAdapter customAdapter = new CustomAdapter();
         gridView.setAdapter(customAdapter);
 
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                String title = list.get(position).getName();
-                //Create the bundle
-                Bundle bundle = new Bundle();
-                bundle.putString("title", title);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (!Utils.isNetworkAvailable(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, "No internet connectivity!", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                    String title = list.get(position).getName();
+                    //Create the bundle
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", title);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+
             }
         });
     }

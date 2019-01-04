@@ -33,6 +33,7 @@ import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.SortedList;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,9 +80,9 @@ public class EditFormActivity extends AppCompatActivity {
 
         try {
             JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("fields"));
-            for(int i = 0; i<jsonObject.names().length(); i++){
+            for (int i = 0; i < jsonObject.names().length(); i++) {
                 Log.d("Fields", "key = " + jsonObject.names().getString(i) + " value = " + jsonObject.get(jsonObject.names().getString(i)));
-                formData.addView(generateLayout(String.valueOf(i),jsonObject.get(jsonObject.names().getString(i)).toString()));
+                formData.addView(generateLayout(String.valueOf(i), jsonObject.get(jsonObject.names().getString(i)).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -98,17 +99,17 @@ public class EditFormActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject();
                 JSONObject finalJson = new JSONObject();
                 try {
-                    for(int i = 0 ; i < editTexts.size() ; i++) {
+                    for (int i = 0; i < editTexts.size(); i++) {
                         EditText fld = editTexts.get(i);
-                        jsonObject.accumulate(String.valueOf(i),fld.getText().toString());
+                        jsonObject.accumulate(String.valueOf(i), fld.getText().toString());
                     }
-                    jsonObject.accumulate("name",imageName);
-                    finalJson.accumulate("fields",jsonObject);
-                    finalJson.accumulate("type",type);
+                    jsonObject.accumulate("name", imageName);
+                    finalJson.accumulate("fields", jsonObject);
+                    finalJson.accumulate("type", type);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                String pathD = Environment.getExternalStorageDirectory() + "/" + "DocumentScanner" + "/" + type +"/";
+                String pathD = Environment.getExternalStorageDirectory() + "/" + "DocumentScanner" + "/" + type + "/";
                 File imageDir = new File(pathD, "imageDir");
                 File dataDir = new File(pathD, "dataDir");
 
@@ -120,7 +121,7 @@ public class EditFormActivity extends AppCompatActivity {
 
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 File imgFile = new File(imageDir, "Image" + "_" + timeStamp + ".png");
-                File dataFile = new File(dataDir,"Data" + "_" + timeStamp + ".json");
+                File dataFile = new File(dataDir, "Data" + "_" + timeStamp + ".json");
                 try {
                     imgFile.createNewFile();
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -135,7 +136,7 @@ public class EditFormActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.d("Final Json: ",jsonObject.toString()+"");
+                Log.d("Final Json: ", jsonObject.toString() + "");
                 Retrofit.Builder builder = new Retrofit.Builder()
                         .baseUrl("http://ed4eeaaf.ngrok.io")
                         .addConverterFactory(GsonConverterFactory.create());
@@ -147,16 +148,15 @@ public class EditFormActivity extends AppCompatActivity {
                 call.enqueue(new Callback<DatabaseResponse>() {
                     @Override
                     public void onResponse(Call<DatabaseResponse> call, Response<DatabaseResponse> response) {
-                        if(response.body().isStatus()) {
-                            Toast.makeText(EditFormActivity.this,"Data inserted successfully",Toast.LENGTH_LONG).show();
+                        if (response.body().isStatus()) {
+                            Toast.makeText(EditFormActivity.this, "Data inserted successfully", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
 //                            Snackbar snackbar = Snackbar.make(myToolbar.getRootView(),"Data inserted successfully",1000);
 //                            snackbar.show();
-                            startActivity(new Intent(EditFormActivity.this,MainActivity.class));
-                        }
-                        else {
+                            startActivity(new Intent(EditFormActivity.this, MainActivity.class));
+                        } else {
 
-                            Toast.makeText(EditFormActivity.this,"Failure Due To : "+ response.body().getReason(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditFormActivity.this, "Failure Due To : " + response.body().getReason(), Toast.LENGTH_LONG).show();
                             dialog.dismiss();
 //                            Snackbar snackbar = Snackbar.make(myToolbar.getRootView(),"Failure Due To : "+ response.body().getReason(),1000);
 //                            snackbar.show();
@@ -168,7 +168,7 @@ public class EditFormActivity extends AppCompatActivity {
                         dialog.dismiss();
 //                        Snackbar snackbar = Snackbar.make(myToolbar.getRootView(),"Something went wrong",1000);
 //                        snackbar.show();
-                        Toast.makeText(EditFormActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditFormActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
