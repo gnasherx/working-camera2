@@ -1006,6 +1006,7 @@ public class CameraFragment extends Fragment
             } finally {
                 Log.d(TAG, "run: finally");
                 Intent intent = new Intent(getActivity().getBaseContext(), PreviewActivity.class);
+                intent.putExtra("type",getArguments().getString("type"));
                 intent.putExtra("filePath", mFile.getAbsolutePath());
                 startActivity(intent);
                 mImage.close();

@@ -55,7 +55,7 @@ public class ListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListActivity.this, CameraActivity.class));
+                startActivity(new Intent(ListActivity.this, CameraActivity.class).putExtra("type",title));
             }
         });
 
