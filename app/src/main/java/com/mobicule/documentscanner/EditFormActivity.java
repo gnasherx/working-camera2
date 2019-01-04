@@ -4,16 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.mobicule.documentscanner.Retrofit.DatabaseResponse;
@@ -33,7 +32,6 @@ import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.SortedList;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,6 +93,7 @@ public class EditFormActivity extends AppCompatActivity {
                 final ProgressDialog dialog = new ProgressDialog(EditFormActivity.this);
                 dialog.setTitle("Uploading");
                 dialog.setMessage("Please wait while we upload your data to database...");
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
                 JSONObject jsonObject = new JSONObject();
                 JSONObject finalJson = new JSONObject();
@@ -138,7 +137,7 @@ public class EditFormActivity extends AppCompatActivity {
 
                 Log.d("Final Json: ", jsonObject.toString() + "");
                 Retrofit.Builder builder = new Retrofit.Builder()
-                        .baseUrl("http://ed4eeaaf.ngrok.io")
+                        .baseUrl("http://35.244.9.26")
                         .addConverterFactory(GsonConverterFactory.create());
                 Retrofit retrofit = builder.build();
                 RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), finalJson.toString());

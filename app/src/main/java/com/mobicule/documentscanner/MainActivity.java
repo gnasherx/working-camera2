@@ -2,19 +2,10 @@ package com.mobicule.documentscanner;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getName();
@@ -73,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!Utils.isNetworkAvailable(MainActivity.this)) {
                     Toast.makeText(MainActivity.this, "No internet connectivity!", Toast.LENGTH_LONG).show();
                 } else {
-                    if(checkAndRequestPermissions()) {
+                    if (position == 3 || position == 4 || position == 5) {
+                        Toast.makeText(MainActivity.this, "Work in progress!", Toast.LENGTH_SHORT).show();
+                    } else if (checkAndRequestPermissions()) {
                         Intent intent = new Intent(MainActivity.this, ListActivity.class);
                         String title = list.get(position).getName();
                         //Create the bundle
@@ -118,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             return v1;
         }
     }
+
     private boolean checkAndRequestPermissions() {
         int permissionReadStorage = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionWriteStorage = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);

@@ -7,16 +7,18 @@
     tools:context=".PreviewActivity">
 
     <Button
+        android:id="@+id/uploadBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/uploadBtn"
-        android:text="UPLOAD"
-        android:layout_alignParentBottom="true"/>
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:text="UPLOAD" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/uploadBtn"/>
+        android:layout_above="@id/uploadBtn" />
 
 </RelativeLayout>

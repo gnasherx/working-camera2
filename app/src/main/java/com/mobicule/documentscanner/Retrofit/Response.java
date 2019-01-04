@@ -5,18 +5,23 @@ import com.google.gson.JsonObject;
 public class Response {
 
     private boolean status;
-    private String name;
+    private String image_path;
+    private String photo_path;
     private JsonObject fields;
 
     public boolean getStatus() {
         return status;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public JsonObject getFields() {
         return fields;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public String getPhoto_path() {
+        return photo_path;
     }
 }

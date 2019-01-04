@@ -12,6 +12,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -30,6 +32,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaActionSound;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -475,10 +478,10 @@ public class CameraFragment extends Fragment
             if (getArguments().getString("type") != null) {
                 if (getArguments().getString("type").equals("Bank Cheque")) {
                     Log.d(TAG, "onViewCreated: Bank Cheque");
-                    LEFT = 80;
-                    TOP = 50;
-                    RIGHT = 80;
-                    BOTTOM = 50;
+                    LEFT = 100;
+                    TOP = 80;
+                    RIGHT = 100;
+                    BOTTOM = 80;
                 } else {
                     LEFT = 100;
                     TOP = 200;
@@ -938,7 +941,7 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
+//                    showToast("Saved: " + mFile);
                     //Log.d(TAG, mFile.toString());
                     //  unlockFocus();
                 }
@@ -1043,28 +1046,31 @@ public class CameraFragment extends Fragment
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
-            FileOutputStream output = null;
+            //FileOutputStream output = null;
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            Uri xUri = null;
             try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
+//                output = new FileOutputStream(mFile);
+//                output.write(bytes);
+                xUri = Utils.getUri(getActivity().getBaseContext(),bmp);
 
-
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 Log.d(TAG, "run: finally");
                 Intent intent = new Intent(getActivity().getBaseContext(), PreviewActivity.class);
                 intent.putExtra("type", getArguments().getString("type"));
-                intent.putExtra("filePath", mFile.getAbsolutePath());
+//                intent.putExtra("filePath", mFile.getAbsolutePath());
+                intent.putExtra("fileUri" , xUri);
                 startActivity(intent);
                 mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if (null != output) {
+//                    try {
+//                        output.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
         }
 

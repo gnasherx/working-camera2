@@ -1,6 +1,7 @@
 package com.mobicule.documentscanner;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobicule.documentscanner.models.SingleDocument;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,7 +58,27 @@ public class ListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListActivity.this, CameraActivity.class).putExtra("type",title));
+                if(title.equalsIgnoreCase("PAN Card")) {
+                    new AlertDialog.Builder(ListActivity.this)
+                            .setTitle("Select The Format")
+                            .setMessage("Please select the format of PAN Card: ")
+                            .setPositiveButton("New", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(ListActivity.this, CameraActivity.class).putExtra("type","PAN Card"));
+                                }
+                            })
+                            .setNegativeButton("Old", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(ListActivity.this, CameraActivity.class).putExtra("type","PAN Card Old"));
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    startActivity(new Intent(ListActivity.this, CameraActivity.class).putExtra("type",title));
+                }
             }
         });
 
