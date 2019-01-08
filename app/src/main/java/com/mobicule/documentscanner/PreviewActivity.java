@@ -85,6 +85,8 @@ public class PreviewActivity extends AppCompatActivity {
         });
 
         CropImage.activity(imageUri)
+                .setAllowRotation(true)
+                .setRotationDegrees(270)
                 .start(this);
 
     }
